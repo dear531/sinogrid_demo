@@ -5,8 +5,7 @@ int main(int argc, char *argv[])
 {
 	char buff[1024] = {0};
 	char *str = "\n1\n2\n3\n1\n2\n3\n";
-	sprintf(buff, "echo \"%s\" | sort | uniq ", str);
-	fprintf(stdout, "buff:%s", buff);
+	sprintf(buff, "echo \"%s\" | sort | awk \'{if(a!=$1) {print;a=$1} }\' ", str);
 	FILE *uniq_fp;
 	uniq_fp = popen(buff, "r");
 	while (memset(buff, 0x00, sizeof(buff)), NULL != fgets(buff, sizeof(buff), uniq_fp)) {
