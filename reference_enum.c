@@ -3,10 +3,16 @@
 int main(int argc, char *argv[])
 {
 	enum enum_value {
-		ONE = 1,
-		TWO = 2,
-		THREE = 3,
+		ONE = 0,
+		TWO,
+		THREE,
+		MAX,
 	};
-	fprintf(stdout, "enum_value.OEN:%d\n", (enum enum_value)2);
+	int value[MAX] = {1, 0, 1024};
+	int i;
+	for (i = 0; MAX > i; i++) {
+		fprintf(stdout, "enum_value.OEN:%d\n", (enum enum_value)i);
+		fprintf(stdout, "value :%d\n", value[(enum enum_value)i]);
+	}
 	return 0;
 }
