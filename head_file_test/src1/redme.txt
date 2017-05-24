@@ -1,0 +1,4 @@
+step 1: make src1 and make src2
+step 2: cp src2/test to src1 (overwrite src1/test)
+stop 3: cd src1/ set export LD_LIBRARY_PATH=LD_LIBRARY_PATH:. and gdb -tui test
+view meth.sub jump to meth.mul func
