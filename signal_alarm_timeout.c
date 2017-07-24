@@ -10,6 +10,7 @@
 
 void sig_alarm(int signum)
 {
+	fprintf(stdout, "this is signal %d function\n", signum);
 }
 int main(void)
 {
@@ -32,7 +33,11 @@ int main(void)
 	}
 	int len = 0;
 	char recvbuff[1024] = {0};
-	signal(SIGALRM, sig_alarm);
+	struct sigaction newact, oldact;
+	newact.sa_handler = sig_alarm;
+	newact.sa_flags = 0;
+
+	sigaction(SIGALRM, &newact, &oldact);
 	alarm(10);
 	while (1) {
 		len = recv(sockfd, recvbuff, sizeof(recvbuff), 0);
