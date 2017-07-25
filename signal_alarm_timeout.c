@@ -11,6 +11,8 @@
 void sig_alarm(int signum)
 {
 	fprintf(stdout, "this is signal %d function\n", signum);
+	sleep(5);
+	fprintf(stdout, "exit %s\n", __func__);
 }
 int main(void)
 {
@@ -36,8 +38,16 @@ int main(void)
 	struct sigaction newact, oldact;
 	newact.sa_handler = sig_alarm;
 	newact.sa_flags = 0;
-
-	sigaction(SIGALRM, &newact, &oldact);
+	sigemptyset(&newact.sa_mask);
+#if 0
+	int sigaddset(sigset_t *set, int signum);
+#endif
+	sigaddset(&newact.sa_mask, SIGINT);
+	if (-1 == sigaction(SIGALRM, &newact, &oldact)) {
+		fprintf(stderr, "sigaction err :%s\n",
+				strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 	alarm(10);
 	while (1) {
 		len = recv(sockfd, recvbuff, sizeof(recvbuff), 0);
@@ -61,5 +71,10 @@ int main(void)
 		}
 	}
 	fprintf(stdout, "end\n");
+	if (-1 == sigaction(SIGALRM, &oldact, NULL)) {
+		fprintf(stderr, "restore signal error :%s\n",
+				strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 	return 0;
 }
